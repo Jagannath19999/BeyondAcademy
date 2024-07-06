@@ -1,0 +1,84 @@
+﻿
+@{
+    ViewData["Title"] = "Login";
+    Layout = null;
+}
+
+<head>
+    <link rel="icon" type="image/png" href="~/images/icons/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="~/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="~/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="~/fonts/iconic/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" type="text/css" href="~/vendor/animate/animate.css">
+    <link rel="stylesheet" type="text/css" href="~/vendor/css-hamburgers/hamburgers.min.css">
+    <link rel="stylesheet" type="text/css" href="~/vendor/animsition/css/animsition.min.css">
+    <link rel="stylesheet" type="text/css" href="~/vendor/select2/select2.min.css">
+    <link rel="stylesheet" type="text/css" href="~/vendor/daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" type="text/css" href="~/css/util.css">
+    <link rel="stylesheet" type="text/css" href="~/css/main.css">
+</head>
+<body>
+    <div class="limiter" style="padding-top:85px;">
+        <div class="container-login100" style="background-image: url('~/images/bg-01.jpg');height:50%;">
+            <div class="wrap-login100">
+                <form asp-controller="Home" asp-action="Login" method="post" class="login100-form validate-form">
+                    <span class="login100-form-logo">
+                        @*<img src="~/images/icons/JJOLogoShort.png" alt="Logo" style="height:100px; width:100px;" />*@
+                        <i class="zmdi zmdi-landscape"></i>
+                    </span>
+
+                    <span class="login100-form-title p-b-34 p-t-27">
+                        Log in
+                    </span>
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="alert alert-danger">
+                            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                            {
+                                <div>@error.ErrorMessage</div>}
+                        </div>}
+                    <div class="wrap-input100 validate-input" data-validate="Enter User ID">
+                        <input class="input100" type="text" id="userId" name="userId" placeholder="User ID" required>
+                        <span class="focus-input100" data-placeholder="&#xf207;"></span>
+                    </div>
+
+                    <div class="wrap-input100 validate-input" data-validate="Enter password">
+                        <input class="input100" type="password" id="password" name="password" placeholder="Password" required>
+                        <span class="focus-input100" data-placeholder="&#xf191;"></span>
+                    </div>
+
+                    <div class="container-login100-form-btn" style="padding:5px;">
+                        <button type="submit" class="login100-form-btn" style="width:100%;">
+                            Login
+                        </button>
+                    </div>
+                </form>
+                <div class="container-login100-form-btn" style="padding:5px;">
+                    <a type="submit" class="login100-form-btn" asp-controller="Registration" asp-action="Register" style="width:100%;">
+                        Forgot Password
+                    </a>
+                </div>
+                @*@<div class="container-login100-form-btn" style="padding:5px;">
+                    <a type="submit" class="login100-form-btn" asp-controller="Home" asp-action="Index" style="width:100%;">
+                        Home
+                    </a>
+                </div>*@
+            </div>
+        </div>
+    </div>
+
+    <script src="~/vendor/jquery/jquery-3.2.1.min.js"></script>
+    <script src="~/vendor/animsition/js/animsition.min.js"></script>
+    <script src="~/vendor/bootstrap/js/popper.js"></script>
+    <script src="~/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/vendor/select2/select2.min.js"></script>
+    <script src="~/vendor/daterangepicker/moment.min.js"></script>
+    <script src="~/vendor/daterangepicker/daterangepicker.js"></script>
+    <script src="~/vendor/countdowntime/countdowntime.js"></script>
+    <script src="~/js/main.js"></script>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+</body>
+
