@@ -21,6 +21,7 @@ namespace BeyondAcademy.Models
         public virtual DbSet<Registration> Registrations { get; set; } = null!;
         public virtual DbSet<Role> Roles { get; set; } = null!;
 
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Account>(entity =>
@@ -35,6 +36,8 @@ namespace BeyondAcademy.Models
                 entity.Property(e => e.CreatedBy).HasMaxLength(255);
 
                 entity.Property(e => e.CreatedOn).HasColumnType("datetime");
+
+                entity.Property(e => e.Email).HasMaxLength(255);
 
                 entity.Property(e => e.Modified).HasColumnType("datetime");
 

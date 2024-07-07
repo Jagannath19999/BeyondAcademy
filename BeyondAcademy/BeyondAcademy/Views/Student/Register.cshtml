@@ -1,0 +1,111 @@
+﻿@model BeyondAcademy.ViewModels.StudentRegistrationViewModel
+
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<head>
+    <link rel="icon" type="image/png" href="~/images/icons/favicon.ico" />
+    <link rel="stylesheet" type="text/css" href="~/vendor/bootstrap/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="~/fonts/font-awesome-4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" type="text/css" href="~/fonts/iconic/css/material-design-iconic-font.min.css">
+    <link rel="stylesheet" type="text/css" href="~/vendor/animate/animate.css">
+    <link rel="stylesheet" type="text/css" href="~/vendor/css-hamburgers/hamburgers.min.css">
+    <link rel="stylesheet" type="text/css" href="~/vendor/animsition/css/animsition.min.css">
+    <link rel="stylesheet" type="text/css" href="~/vendor/select2/select2.min.css">
+    <link rel="stylesheet" type="text/css" href="~/vendor/daterangepicker/daterangepicker.css">
+    <link rel="stylesheet" type="text/css" href="~/css/util.css">
+    <link rel="stylesheet" type="text/css" href="~/css/main.css">
+</head>
+<body>
+    <div class="limiter" style="padding-top:85px;">
+        <div class="container-login100" style="background-image: url('~/images/bg-01.jpg');height:50%;">
+            <div class="wrap-login100">
+                <form asp-controller="Student" asp-action="Register" method="post" class="login100-form validate-form">
+                    <span class="login100-form-logo">
+                        <img src="~/images/logo/logo.png" alt="Logo" style="height:150%;" />
+                    </span>
+
+                    <span class="login100-form-title p-b-34 p-t-27">
+                        Student Registration
+                    </span>
+
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div class="alert alert-danger">
+                            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                            {
+                                <div>@error.ErrorMessage</div>
+                            }
+                        </div>
+                    }
+                    @if (ViewData["ErrorMessage"] != null)
+                    {
+                        <div class="alert alert-danger">
+                            @ViewData["ErrorMessage"]
+                        </div>
+                    }
+                    @if (ViewData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success">
+                            @ViewData["SuccessMessage"]
+                        </div>
+                    }
+
+                    <div class="wrap-input100 validate-input" data-validate="Enter first name">
+                        <input class="input100" type="text" id="firstName" name="FirstName" value="@(Model?.FirstName ?? string.Empty)" placeholder="First Name" required>
+                        <span class="focus-input100" data-placeholder="&#xf207;"></span>
+                       @*<span asp-validation-for="FirstName" class="text-danger"></span>*@
+                    </div>
+
+                    <div class="wrap-input100 validate-input" data-validate="Enter last name">
+                        <input class="input100" type="text" id="lastName" name="LastName" value="@(Model?.LastName ?? string.Empty)" placeholder="Last Name" required>
+                        <span class="focus-input100" data-placeholder="&#xf207;"></span>
+                        @*<span asp-validation-for="LastName" class="text-danger"></span>*@
+                    </div>
+
+                    <div class="wrap-input100 validate-input" data-validate="Enter mobile number">
+                        <input class="input100" type="text" id="mobileNo" name="MobileNo" value="@(Model?.MobileNo ?? string.Empty)" placeholder="Mobile Number" required>
+                        <span class="focus-input100" data-placeholder="&#xf2be;"></span>
+                        @*<span asp-validation-for="MobileNo" class="text-danger"></span>*@
+                    </div>
+
+                    <div class="wrap-input100 validate-input" data-validate="Enter email">
+                        <input class="input100" type="email" id="email" name="Email" value="@(Model?.Email ?? string.Empty)" placeholder="Email" required>
+                        <span class="focus-input100" data-placeholder="&#xf1fa;"></span>
+                        @*<span asp-validation-for="Email" class="text-danger"></span>*@
+                    </div>
+
+                    <div class="wrap-input100 validate-input" data-validate="Enter date of birth">
+                        <input class="input100" type="date" id="dateOfBirth" name="DateOfBirth" value="@(Model?.DateOfBirth != null ? Model.DateOfBirth.ToString("yyyy-MM-dd") : string.Empty)" placeholder="Date of Birth" required>
+                        <span class="focus-input100" data-placeholder="&#xf133;"></span>
+                        @*<span asp-validation-for="DateOfBirth" class="text-danger"></span>*@
+                    </div>
+
+                    <div class="container-login100-form-btn" style="padding:5px;">
+                        <button type="submit" class="login100-form-btn" style="width:100%;">
+                            Register
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="~/vendor/jquery/jquery-3.2.1.min.js"></script>
+    <script src="~/vendor/animsition/js/animsition.min.js"></script>
+    <script src="~/vendor/bootstrap/js/popper.js"></script>
+    <script src="~/vendor/bootstrap/js/bootstrap.min.js"></script>
+    <script src="~/vendor/select2/select2.min.js"></script>
+    <script src="~/vendor/daterangepicker/moment.min.js"></script>
+    <script src="~/vendor/daterangepicker/daterangepicker.js"></script>
+    <script src="~/vendor/countdowntime/countdowntime.js"></script>
+    <script src="~/js/main.js"></script>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+</body>
+

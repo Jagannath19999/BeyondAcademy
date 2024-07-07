@@ -6,8 +6,9 @@ namespace BeyondAcademy.Models
     public partial class Account
     {
         public Guid AcId { get; set; }
-        public Guid? RegdId { get; set; }
+        public Guid RegdId { get; set; }
         public string Name { get; set; } = null!;
+        public string Email { get; set; } = null!;
         public string UserId { get; set; } = null!;
         public string Password { get; set; } = null!;
         public bool IsActive { get; set; }

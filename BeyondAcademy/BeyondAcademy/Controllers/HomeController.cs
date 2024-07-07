@@ -83,6 +83,47 @@ namespace BeyondAcademy.Controllers
                 return hashPassword;
             }
         }
-        
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ForgotPassword(string userIdorEmail, string newPassword, string confirmPassword)
+        {
+            if (string.IsNullOrEmpty(userIdorEmail) || string.IsNullOrEmpty(newPassword) || string.IsNullOrEmpty(confirmPassword))
+            {
+                ViewData["ErrorMessage"] = "Please fill the all fields";
+                return View();
+            }
+
+            if (newPassword != confirmPassword)
+            {
+                ViewData["ErrorMessage"] = "Password doesn't match";
+            }
+
+            var sameOldPassword = _context.Accounts.FirstOrDefault(u => (u.UserId == userIdorEmail || u.Email == userIdorEmail) && u.Password == HashPassword(newPassword));
+            if (sameOldPassword != null) 
+            {
+                ViewData["ErrorMessage"] = "New password same as old password, please use a different password";
+                return View();
+            }
+
+            var user = _context.Accounts.FirstOrDefault(u => (u.Email == userIdorEmail || u.UserId == userIdorEmail) && u.IsActive);
+
+            if (user == null)
+            {
+                ViewData["ErrorMessage"] = "No account found with this UserID or Email";
+                return View();
+            }
+
+            user.Password = HashPassword(newPassword);
+            _context.Update(user);
+            await _context.SaveChangesAsync();
+
+            ViewData["SuccessMessage"] = "Password reset successfully";
+            return View();
+        }
+
     }
 }
