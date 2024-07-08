@@ -51,6 +51,38 @@ namespace BeyondAcademy.Controllers
                     CreatedOn = DateTime.Now,
                 };
 
+                var newAccount = new Account
+                {
+                    AcId = Guid.NewGuid(),
+                    RegdId = newStudent.RegdId,
+                    Name = data.FirstName,
+                    Email= data.Email,
+                    UserId = $"{data.Email.Split('@')[0]}{data.MobileNo.Substring(data.MobileNo.Length - 4)}",
+                    Password = _roleService.HashPassword(data.NewPassword),
+                    IsActive = true,
+                    CreatedBy = "Student",
+                    CreatedOn = DateTime.Now,
+                };
+
+                _context.Add(newAccount);
+                await _context.SaveChangesAsync();
+
+                var roleId = _context.Roles.FirstOrDefault( r => r.RoleName == "Student").RoleId;
+                if (roleId != null)
+                {
+                    var accountRole = new AccountRole
+                    {
+                        Arid = Guid.NewGuid(),
+                        AcId = newAccount.AcId,
+                        RoleId = roleId,
+                        IsActive = true,
+                        CreatedBy = "Student",
+                        CreatedOn = DateTime.Now,
+                    };
+                    _context.Add(accountRole);
+                    await _context.SaveChangesAsync();
+                }
+
                 _context.Add(newStudent);
                 await _context.SaveChangesAsync();
 

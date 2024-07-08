@@ -1,5 +1,6 @@
 ﻿using BeyondAcademy.Interface;
 using BeyondAcademy.Models;
+using BeyondAcademy.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using System.Diagnostics;
 using System.Net.Sockets;
@@ -34,7 +35,7 @@ namespace BeyondAcademy.Controllers
         [HttpPost]
         public IActionResult Login(string userId, string password)
         {
-            var user = _context.Accounts.FirstOrDefault(x => x.UserId == userId && x.Password == HashPassword(password) && x.IsActive);
+            var user = _context.Accounts.FirstOrDefault(x => (x.UserId == userId || x.Email == userId) && x.Password == HashPassword(password) && x.IsActive);
             if (user != null)
             {
                 var regId = user.RegdId.ToString();
@@ -73,7 +74,6 @@ namespace BeyondAcademy.Controllers
             return RedirectToAction("Login", "Home");
         }
 
-
         private string HashPassword(string password)
         {
             using (var ms = SHA256.Create())
@@ -83,6 +83,7 @@ namespace BeyondAcademy.Controllers
                 return hashPassword;
             }
         }
+
         public IActionResult ForgotPassword()
         {
             return View();
@@ -125,5 +126,54 @@ namespace BeyondAcademy.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult ChangePassword()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ChangePassword(ChangePasswordViewModel data)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(data);
+            }
+
+            var accountId = HttpContext.Session.GetString("AcId");
+            if (string.IsNullOrEmpty(accountId))
+            {
+                return RedirectToAction(nameof(Login));
+            }
+
+            var account = _context.Accounts.FirstOrDefault(a => a.AcId.ToString() == accountId);
+
+            if (account == null)
+            {
+                ViewData["ErrorMessage"] = "Invalid User";
+                return View(data);
+            }
+
+            var checkCurrentPassword = _context.Accounts.FirstOrDefault(a => a.AcId.ToString() == accountId && a.Password == HashPassword(data.ConfirmPassword));
+            if (checkCurrentPassword == null)
+            {
+                ViewData["ErrorMessage"] = "Incorrect  current password";
+                return View(data);
+            }
+
+            if (data.NewPassword != data.ConfirmPassword)
+            {
+                ViewData["ErrorMessage"] = "New password and confirm password don't match";
+                return View(data);
+            }
+
+            account.Password = HashPassword(data.NewPassword);
+
+            _context.Update(account);
+            await _context.SaveChangesAsync();
+
+            ViewData["SuccessMessage"] = "Password changed successfully";
+            return View();
+        }
     }
 }

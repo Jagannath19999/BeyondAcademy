@@ -1,5 +1,7 @@
 ﻿using BeyondAcademy.Controllers;
 using BeyondAcademy.Models;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace BeyondAcademy.Interface
 {
@@ -24,6 +26,15 @@ namespace BeyondAcademy.Interface
                 return null;
             }
             return role.RoleName;
+        }
+        public string HashPassword(string password)
+        {
+            using (var ms = SHA256.Create())
+            {
+                var hashedBytes = ms.ComputeHash(Encoding.UTF8.GetBytes(password));
+                var hashPassword = BitConverter.ToString(hashedBytes).Replace("-", "").ToLower();
+                return hashPassword;
+            }
         }
     }
 }

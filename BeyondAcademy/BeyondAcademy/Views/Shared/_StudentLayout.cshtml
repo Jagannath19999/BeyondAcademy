@@ -137,13 +137,19 @@
                 <li class="nav-item sidebar-actions">
                     <div class="nav-link">
                         <div class="mt-4">
-                            <div class="border-none">
-                                <p class="text-black">Notification</p>
-                            </div>
+                            <ul class="mt-4 ps-0">
+                                <li>
+                                    <form asp-controller="Home" asp-action="ChangePassword" method="post">
+                                        <button type="Submit" style="padding:0; border:none; background:none; color:#2840fa;">
+                                            <b>Change Password</b>
+                                        </button>
+                                    </form>
+                                </li>
+                            </ul>
                             <ul class="mt-4 ps-0">
                                 <li>
                                     <form asp-controller="Home" asp-action="Logout" method="post">
-                                        <button type="Submit" style="padding:0; border:none; background:none; color:darkblue;">
+                                        <button type="Submit" style="padding:0; border:none; background:none; color:#b8020b;">
                                             <b>Sign Out</b>
                                         </button>
                                     </form>
