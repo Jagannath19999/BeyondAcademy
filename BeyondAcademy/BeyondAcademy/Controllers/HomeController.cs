@@ -154,10 +154,16 @@ namespace BeyondAcademy.Controllers
                 return View(data);
             }
 
-            var checkCurrentPassword = _context.Accounts.FirstOrDefault(a => a.AcId.ToString() == accountId && a.Password == HashPassword(data.ConfirmPassword));
+            if (data.CurrentPassword == data.NewPassword)
+            {
+                ViewData["ErrorMessage"] = "New password can't be same as current password";
+                return View(data);
+            }
+
+            var checkCurrentPassword = _context.Accounts.FirstOrDefault(a => a.AcId.ToString() == accountId && a.Password == HashPassword(data.CurrentPassword));
             if (checkCurrentPassword == null)
             {
-                ViewData["ErrorMessage"] = "Incorrect  current password";
+                ViewData["ErrorMessage"] = "Incorrect current password";
                 return View(data);
             }
 
@@ -168,6 +174,8 @@ namespace BeyondAcademy.Controllers
             }
 
             account.Password = HashPassword(data.NewPassword);
+            account.ModifiedBy = account.Name;
+            account.Modified = DateTime.Now;
 
             _context.Update(account);
             await _context.SaveChangesAsync();

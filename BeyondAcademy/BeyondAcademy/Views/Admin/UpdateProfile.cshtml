@@ -1,0 +1,106 @@
+﻿@model BeyondAcademy.ViewModels.AdminDetailsViewModel
+
+@{
+    ViewData["Title"] = "Update Profile";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3>Update Profile</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="UpdateProfile" method="post">
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <strong>First Name:</strong>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" name="FirstName" class="form-control" value="@Model.FirstName" required />
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <strong>Last Name:</strong>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" name="LastName" class="form-control" value="@Model.LastName" required />
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <strong>Mobile No:</strong>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" name="MobileNo" class="form-control" value="@Model.MobileNo" required />
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <strong>Email:</strong>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="email" name="Email" class="form-control" value="@Model.Email" required />
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <strong>Date of Birth:</strong>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="date" name="DateOfBirth" class="form-control" value="@Model.DateOfBirth" required />
+                            </div>
+                        </div>
+                        <div class="row mb-3">
+                            <div class="col-md-4">
+                                <strong>User ID:</strong>
+                            </div>
+                            <div class="col-md-8">
+                                <input type="text" name="UserId" class="form-control" value="@Model.UserId" readonly />
+                            </div>
+                        </div>
+                        <input type="hidden" name="AcId" value="@Model.AcId" />
+                        <input type="hidden" name="RegdId" value="@Model.RegdId" />
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary">Update</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <!-- Include jQuery library -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <!-- Include SweetAlert2 library -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            // Get messages from ViewData and escape special characters
+            var successMessage = '@ViewData["SuccessMessage"]';
+            var errorMessage = '@ViewData["ErrorMessage"]';
+
+            if (successMessage) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: successMessage
+                });
+            }
+            if (errorMessage) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: errorMessage
+                });
+            }
+        });
+    </script>
+}
