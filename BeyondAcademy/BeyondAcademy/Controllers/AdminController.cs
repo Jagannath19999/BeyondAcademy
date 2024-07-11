@@ -31,7 +31,7 @@ namespace BeyondAcademy.Controllers
             if (roleName == null)
             {
                 ModelState.AddModelError(string.Empty, "No role is assigned to you");
-                return RedirectToAction("Login","Home");
+                return RedirectToAction("Login", "Home");
             }
 
             if (roleName == "Student" || roleName == "Teacher")
@@ -61,79 +61,6 @@ namespace BeyondAcademy.Controllers
             }
 
             return View(adminDetails);
-        }
-
-        [HttpPost]
-        public IActionResult UpdateProfile(AdminDetailsViewModel model)
-        {
-            bool isValid = true;
-
-            if (model.FirstName.Any(char.IsDigit) || model.LastName.Any(char.IsDigit))
-            {
-                ModelState.AddModelError("", "First Name and Last Name cannot contain numbers.");
-                isValid = false;
-            }
-
-            if (!Regex.IsMatch(model.MobileNo, @"^\d{10}$"))
-            {
-                ModelState.AddModelError("MobileNo", "Mobile Number must be exactly 10 digits.");
-                isValid = false;
-            }
-
-            try
-            {
-                var mailAddress = new MailAddress(model.Email);
-            }
-            catch (FormatException)
-            {
-                ModelState.AddModelError("Email", "Invalid Email Address.");
-                isValid = false;
-            }
-
-            DateTime dateOfBirth;
-            if (!DateTime.TryParse(model.DateOfBirth.ToString(), out dateOfBirth))
-            {
-                ModelState.AddModelError("DateOfBirth", "Invalid Date of Birth format.");
-                isValid = false;
-            }
-            else if (dateOfBirth > DateTime.Today)
-            {
-                ModelState.AddModelError("DateOfBirth", "Date of Birth cannot be in the future.");
-                isValid = false;
-            }
-
-            if (!isValid)
-            {
-                var errorMessages = ModelState.Values
-                    .SelectMany(v => v.Errors)
-                    .Select(e => e.ErrorMessage)
-                    .ToList();
-
-                TempData["ErrorMessage"] = string.Join(" | ", errorMessages);
-                return RedirectToAction("UpdateProfile", new { AcId = model.AcId, RegdId = model.RegdId });
-            }
-
-            var registration = _context.Registrations.FirstOrDefault(r => r.RegdId == model.RegdId);
-            var account = _context.Accounts.FirstOrDefault(a => a.AcId == model.AcId);
-
-            if (registration != null && account != null)
-            {
-                registration.FirstName = model.FirstName;
-                registration.LastName = model.LastName;
-                registration.MobileNo = model.MobileNo;
-                registration.Email = model.Email;
-                registration.DateOfBirth = model.DateOfBirth;
-
-                account.UserId = model.UserId;
-
-                _context.SaveChanges();
-
-                TempData["SuccessMessage"] = "Profile updated successfully!";
-                return RedirectToAction("UpdateProfile", new { AcId = model.AcId, RegdId = model.RegdId });
-            }
-
-            TempData["ErrorMessage"] = "Registration or account not found.";
-            return View(model);
         }
 
         public IActionResult UpdateProfile(Guid AcId, Guid RegdId)
@@ -183,62 +110,60 @@ namespace BeyondAcademy.Controllers
             return View(adminDetails);
         }
 
-
         [HttpPost]
-        public IActionResult UpdateDetails(AdminDetailsViewModel model)
+        public IActionResult UpdateProfile(AdminDetailsViewModel model)
         {
-            // Manual validation
             bool isValid = true;
 
-            // Check if FirstName and LastName are valid (no numbers allowed)
             if (model.FirstName.Any(char.IsDigit) || model.LastName.Any(char.IsDigit))
             {
-                ModelState.AddModelError("", "First Name and Last Name cannot contain numbers.");
+                ModelState.AddModelError("", "First Name and Last Name cannot contain numbers");
                 isValid = false;
             }
 
-            // Check if MobileNo is a valid 10-digit number
             if (!Regex.IsMatch(model.MobileNo, @"^\d{10}$"))
             {
-                ModelState.AddModelError("MobileNo", "Mobile Number must be exactly 10 digits.");
+                ModelState.AddModelError("MobileNo", "Mobile Number must be exactly 10 digits");
                 isValid = false;
             }
 
-            // Check if Email is a valid email address
+            if (string.IsNullOrEmpty(model.MobileNo))
+            {
+                ModelState.AddModelError("MobileNo", "Mobile Number can't be alphabet");
+                isValid = false;
+            }
+
             try
             {
                 var mailAddress = new MailAddress(model.Email);
             }
             catch (FormatException)
             {
-                ModelState.AddModelError("Email", "Invalid Email Address.");
+                ModelState.AddModelError("Email", "Invalid Email Address");
                 isValid = false;
             }
 
             DateTime dateOfBirth;
             if (!DateTime.TryParse(model.DateOfBirth.ToString(), out dateOfBirth))
             {
-                ModelState.AddModelError("DateOfBirth", "Invalid Date of Birth format.");
+                ModelState.AddModelError("DateOfBirth", "Invalid Date of Birth format");
                 isValid = false;
             }
             else if (dateOfBirth > DateTime.Today)
             {
-                ModelState.AddModelError("DateOfBirth", "Date of Birth cannot be in the future.");
+                ModelState.AddModelError("DateOfBirth", "Date of Birth cannot be in the future");
                 isValid = false;
             }
 
-            if (!isValid || !ModelState.IsValid)
+            if (!isValid)
             {
-                // Collect error messages from ModelState
                 var errorMessages = ModelState.Values
                     .SelectMany(v => v.Errors)
                     .Select(e => e.ErrorMessage)
                     .ToList();
 
                 TempData["ErrorMessage"] = string.Join(" | ", errorMessages);
-
-                // Return to the same view with the validation messages
-                return View(model);
+                return RedirectToAction("UpdateProfile", new { AcId = model.AcId, RegdId = model.RegdId });
             }
 
             var registration = _context.Registrations.FirstOrDefault(r => r.RegdId == model.RegdId);
@@ -246,7 +171,6 @@ namespace BeyondAcademy.Controllers
 
             if (registration != null && account != null)
             {
-                // Update the registration and account details
                 registration.FirstName = model.FirstName;
                 registration.LastName = model.LastName;
                 registration.MobileNo = model.MobileNo;
@@ -255,19 +179,198 @@ namespace BeyondAcademy.Controllers
 
                 account.UserId = model.UserId;
 
-                // Save changes to the database
                 _context.SaveChanges();
 
-                // Set a success message and redirect to the UpdateProfile action
                 TempData["SuccessMessage"] = "Profile updated successfully!";
                 return RedirectToAction("UpdateProfile", new { AcId = model.AcId, RegdId = model.RegdId });
             }
 
-            // If registration or account is not found, set an error message and return to the view
-            TempData["ErrorMessage"] = "Registration or account not found.";
+            TempData["ErrorMessage"] = "Registration or account not found";
             return View(model);
         }
 
+        public IActionResult TeacherIndex()
+        {
+            var teachers = _context.Registrations.Where(r => r.CreatedBy == "Admin")
+                           .Select(reg => new TeacherViewModel
+                           {
+                               RegdId = reg.RegdId,
+                               FirstName = reg.FirstName,
+                               LastName = reg.LastName,
+                               MobileNo = reg.MobileNo,
+                               Email = reg.Email,
+                               DateOfBirth = reg.DateOfBirth,
+                               IsActive = reg.IsActive
+                           }).ToList();
+
+            return View(teachers);
+        }
+
+        public IActionResult AddTeacher()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddTeacher(TeacherViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var reg = new Registration
+                {
+                    RegdId = Guid.NewGuid(),
+                    FirstName = model.FirstName,
+                    LastName = model.LastName,
+                    MobileNo = model.MobileNo,
+                    Email = model.Email,
+                    DateOfBirth = model.DateOfBirth,
+                    IsActive = true,
+                    CreatedBy = "Admin",
+                    CreatedOn = DateTime.Now,
+                };
+
+                var acc = new Account
+                {
+                    AcId = Guid.NewGuid(),
+                    RegdId = reg.RegdId,
+                    Name = model.FirstName,
+                    Email = model.Email,
+                    UserId = $"{model.Email.Split('@')[0]}{model.MobileNo.Substring(model.MobileNo.Length - 4)}",
+                    Password = _roleService.HashPassword(model.NewPassword),
+                    IsActive = true,
+                    CreatedBy = "Admin",
+                    CreatedOn = DateTime.Now,
+                };
+
+                var roleId = _context.Roles.FirstOrDefault(r => r.RoleName == "Teacher")?.RoleId;
+                var accRole = new AccountRole
+                {
+                    Arid = Guid.NewGuid(),
+                    AcId = acc.AcId,
+                     = roleId.Value,
+                    IsActive = true,
+                    CreatedBy = "Admin",
+                    CreatedOn = DateTime.Now,
+                };
+
+                _context.Registrations.Add(reg);
+                _context.Accounts.Add(acc);
+                _context.AccountRoles.Add(accRole);
+                await _context.SaveChangesAsync();
+
+                TempData["SuccessMessage"] = "Teacher added successfully!";
+                return RedirectToAction("TeacherIndex");
+            }
+
+            TempData["ErrorMessage"] = "Error adding teacher. Please check the details and try again.";
+            return View(model);
+        }
+
+        public IActionResult UpdateTeacher(Guid id)
+        {
+            var teacher = (from reg in _context.Registrations
+                           join acc in _context.Accounts on reg.RegdId equals acc.RegdId
+                           where reg.RegdId == id
+                           select new TeacherViewModel
+                           {
+                               RegdId = reg.RegdId,
+                               FirstName = reg.FirstName,
+                               LastName = reg.LastName,
+                               MobileNo = reg.MobileNo,
+                               Email = reg.Email,
+                               //DateOfBirth = DateTime.Parse(reg.DateOfBirth),
+                               DateOfBirth = reg.DateOfBirth,
+                           }).FirstOrDefault();
+
+            if (teacher == null)
+            {
+                TempData["ErrorMessage"] = "Teacher not found.";
+                return RedirectToAction("TeacherIndex");
+            }
+
+            return View(teacher);
+        }
+
+        [HttpPost]
+        public IActionResult UpdateTeacher(TeacherViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var reg = _context.Registrations.FirstOrDefault(r => r.RegdId == model.RegdId);
+                var acc = _context.Accounts.FirstOrDefault(a => a.RegdId == model.RegdId);
+
+                if (reg != null && acc != null)
+                {
+                    reg.FirstName = model.FirstName;
+                    reg.LastName = model.LastName;
+                    reg.MobileNo = model.MobileNo;
+                    reg.Email = model.Email;
+                    reg.DateOfBirth = model.DateOfBirth;
+
+                    acc.Email = model.Email;
+
+                    _context.SaveChanges();
+
+                    TempData["SuccessMessage"] = "Teacher updated successfully!";
+                    return RedirectToAction("TeacherIndex");
+                }
+
+                TempData["ErrorMessage"] = "Teacher not found.";
+            }
+
+            TempData["ErrorMessage"] = "Error updating teacher. Please check the details and try again.";
+            return View(model);
+        }
+
+        [HttpPost]
+        public JsonResult DeleteTeacher(Guid id)
+        {
+            var reg = _context.Registrations.FirstOrDefault(r => r.RegdId == id);
+            var acc = _context.Accounts.FirstOrDefault(a => a.RegdId == id);
+            var roleId = _context.Roles.FirstOrDefault(r => r.RoleName == "Teacher")?.RoleId;
+            var accRole = _context.AccountRoles.FirstOrDefault(ar => ar.AcId == acc.AcId && ar.RoleId == roleId);
+
+            if (reg != null && acc != null && accRole != null)
+            {
+                reg.IsActive = false;
+                acc.IsActive = false;
+                _context.SaveChanges();
+
+                TempData["SuccessMessage"] = "Teacher disabled successfully!";
+                return Json(new { success = true, message = "Teacher disabled successfully!" });
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Error disabling teacher. Teacher not found.";
+            }
+
+            return Json(new { success = false, message = "Teacher not found." });
+        }
+
+        [HttpPost]
+        public JsonResult EnableTeacher(Guid id)
+        {
+            var reg = _context.Registrations.FirstOrDefault(r => r.RegdId == id);
+            var acc = _context.Accounts.FirstOrDefault(a => a.RegdId == id);
+            var roleId = _context.Roles.FirstOrDefault(r => r.RoleName == "Teacher")?.RoleId;
+            var accRole = _context.AccountRoles.FirstOrDefault(ar => ar.AcId == acc.AcId && ar.RoleId == roleId);
+
+            if (reg != null && acc != null && accRole != null)
+            {
+                reg.IsActive = true;
+                acc.IsActive = true;
+                _context.SaveChanges();
+
+                TempData["SuccessMessage"] = "Teacher enabled successfully!";
+                return Json(new { success = true, message = "Teacher enabled successfully!" });
+            }
+            else
+            {
+                TempData["ErrorMessage"] = "Error enabling teacher. Teacher not found.";
+            }
+
+            return Json(new { success = false, message = "Teacher not found." });
+        }
 
     }
 }

@@ -64,7 +64,7 @@
                     </div>-->
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="collapse" asp-controller="Admin" asp-action="GetAllTeacher" aria-expanded="false" aria-controls="icons">
+                    <a class="nav-link" asp-controller="Admin" asp-action="TeacherIndex" aria-expanded="false" aria-controls="icons">
                         <i class="mdi mdi-account-box menu-icon"></i>
                         <span class="menu-title">Teachers</span>
                         <i class="menu-arrow"></i>
@@ -76,7 +76,7 @@
                     </div>-->
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" data-bs-toggle="collapse" asp-controller="Admin" asp-action="GetAllStudent" aria-expanded="false" aria-controls="forms">
+                    <a class="nav-link" asp-controller="Admin" asp-action="StudentIndex" aria-expanded="false" aria-controls="forms">
                         <i class="mdi mdi-account-box-outline menu-icon"></i>
                         <span class="menu-title">Students</span>
                         <i class="menu-arrow"></i>
@@ -230,6 +230,13 @@
         <!-- page-body-wrapper ends -->
     </div>
     <!-- container-scroller -->
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <!-- Include Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <!-- SweetAlert2 -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <!-- Your custom scripts -->
     @RenderSection("Scripts", required: false)
     <!-- plugins:js -->
     <script src="~/vendors/js/vendor.bundle.base.js"></script>

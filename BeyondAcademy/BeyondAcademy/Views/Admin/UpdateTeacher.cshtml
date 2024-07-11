@@ -1,0 +1,74 @@
+﻿@model BeyondAcademy.ViewModels.TeacherViewModel
+
+@{
+    ViewData["Title"] = "Update Teacher";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white text-center">
+                    <h3>Update Teacher</h3>
+                </div>
+                <div class="card-body">
+                    <form asp-action="UpdateTeacher" method="post">
+                        <input type="hidden" asp-for="RegdId" />
+                        <div class="form-group mb-3">
+                            <label for="FirstName">First Name</label>
+                            <input type="text" class="form-control" asp-for="FirstName" placeholder="Enter first name" />
+                            <span asp-validation-for="FirstName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="LastName">Last Name</label>
+                            <input type="text" class="form-control" asp-for="LastName" placeholder="Enter last name" />
+                            <span asp-validation-for="LastName" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="MobileNo">Mobile No</label>
+                            <input type="text" class="form-control" asp-for="MobileNo" placeholder="Enter mobile number" />
+                            <span asp-validation-for="MobileNo" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="Email">Email</label>
+                            <input type="email" class="form-control" asp-for="Email" placeholder="Enter email address" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                        <div class="form-group mb-3">
+                            <label for="DateOfBirth">Date of Birth</label>
+                            <input type="date" class="form-control" asp-for="DateOfBirth" />
+                            <span asp-validation-for="DateOfBirth" class="text-danger"></span>
+                        </div>
+                        
+                        <button type="submit" class="btn btn-primary w-100">Update</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script type="text/javascript">
+        $(document).ready(function () {
+            var successMessage = '@TempData["SuccessMessage"]';
+            var errorMessage = '@TempData["ErrorMessage"]';
+            if (successMessage) {
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Success',
+                    text: successMessage
+                });
+            }
+            if (errorMessage) {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error',
+                    text: errorMessage
+                });
+            }
+        });
+    </script>
+}
