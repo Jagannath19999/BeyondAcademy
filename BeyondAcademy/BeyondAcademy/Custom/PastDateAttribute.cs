@@ -6,10 +6,14 @@ namespace BeyondAcademy.Custom
     {
         public override bool IsValid(object value)
         {
-            DateTime dob = DateTime.Parse(value.ToString());
-            if (dob is DateTime dateTime)
+            if (value != null)
             {
-                return dob < DateTime.Now;
+                DateTime dob = DateTime.Parse(value.ToString());
+                if (dob is DateTime dateTime)
+                {
+                    return dob < DateTime.Now;
+                }
+                return false;
             }
             return false;
         }

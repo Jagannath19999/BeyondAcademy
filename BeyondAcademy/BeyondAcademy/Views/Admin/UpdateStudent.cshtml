@@ -1,19 +1,19 @@
-﻿@model BeyondAcademy.ViewModels.TeacherViewModel
-
+﻿@model BeyondAcademy.ViewModels.StudentViewModel
 @{
-    ViewData["Title"] = "Update Teacher";
+    ViewData["Title"] = "UpdateStudent";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
+
 
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-6 offset-md-3">
             <div class="card shadow-lg">
                 <div class="card-header bg-primary text-white text-center">
-                    <h3>Update Teacher</h3>
+                    <h3>Update Student</h3>
                 </div>
                 <div class="card-body">
-                    <form asp-action="UpdateTeacher" method="post">
+                    <form asp-action="UpdateStudent" method="post">
                         <input type="hidden" asp-for="RegdId" />
                         <div class="form-group mb-3">
                             <label for="FirstName">First Name</label>
@@ -40,9 +40,9 @@
                             <input type="date" class="form-control" asp-for="DateOfBirth" />
                             <span asp-validation-for="DateOfBirth" class="text-danger"></span>
                         </div>
-                        
+
                         <button type="submit" class="btn btn-primary w-100">Update</button>
-                        <button asp-controller="Admin" asp-action="TeacherIndex" class="btn btn-danger w-100 mt-1">Cancel</button>
+                        <button asp-controller="Admin" asp-action="StudentIndex" class="btn btn-danger w-100 mt-1">Cancel</button>
                     </form>
                 </div>
             </div>

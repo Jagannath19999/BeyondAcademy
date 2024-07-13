@@ -1,9 +1,9 @@
-﻿@model IEnumerable<BeyondAcademy.ViewModels.TeacherViewModel>
-
+﻿@model IEnumerable<BeyondAcademy.ViewModels.StudentViewModel>
 @{
-    ViewData["Title"] = "Teacher Index";
+    ViewData["Title"] = "StudentIndex";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
+
 <style>
     .btn-action {
         height: 37px;
@@ -18,8 +18,7 @@
 <div class="container mt-1">
     <div class="row">
         <div class="col-md-12">
-            <h2 class="align-content-center" style="text-align:center;">Manage Teachers Accounts</h2>
-            <a class="btn btn-primary mb-3" asp-action="AddTeacher">Add Teacher</a>
+            <h2 class="align-content-center" style="text-align:center;">Manage Students Accounts</h2>
             @if (TempData["ErrorMessage"] != null)
             {
                 <div class="alert alert-danger alert-dismissible fade show" role="alert">
@@ -40,16 +39,16 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var teacher in Model)
+                    @foreach (var student in Model)
                     {
                         <tr>
-                            <td>@teacher.FirstName</td>
-                            <td>@teacher.LastName</td>
-                            <td>@teacher.MobileNo</td>
-                            <td>@teacher.Email</td>
-                            <td>@teacher.DateOfBirth</td>
+                            <td>@student.FirstName</td>
+                            <td>@student.LastName</td>
+                            <td>@student.MobileNo</td>
+                            <td>@student.Email</td>
+                            <td>@student.DateOfBirth</td>
                             <td>
-                                @if (teacher.IsActive.Value)
+                                @if (student.IsActive.Value)
                                 {
                                     <span class="badge bg-success">Active</span>
                                 }
@@ -59,14 +58,14 @@
                                 }
                             </td>
                             <td>
-                                <a href="@Url.Action("UpdateTeacher", new { id = teacher.RegdId })" class="btn btn-sm btn-primary btn-action">Update</a>
-                                @if (!teacher.IsActive.Value)
+                                <a href="@Url.Action("UpdateStudent", new { id = student.RegdId })" class="btn btn-sm btn-primary btn-action">Update</a>
+                                @if (!student.IsActive.Value)
                                 {
-                                    <button type="button" class="btn btn-sm btn-success btn-action" data-bs-toggle="modal" data-bs-target="#enableModal" data-teacher-id="@teacher.RegdId">Enable</button>
+                                    <button type="button" class="btn btn-sm btn-success btn-action" data-bs-toggle="modal" data-bs-target="#enableModal" data-student-id="@student.RegdId">Enable</button>
                                 }
-                                @if (teacher.IsActive.Value)
+                                @if (student.IsActive.Value)
                                 {
-                                    <button type="button" class="btn btn-sm btn-danger btn-action" data-bs-toggle="modal" data-bs-target="#deleteModal" data-teacher-id="@teacher.RegdId">Disable</button>
+                                    <button type="button" class="btn btn-sm btn-danger btn-action" data-bs-toggle="modal" data-bs-target="#deleteModal" data-student-id="@student.RegdId">Disable</button>
                                 }
                             </td>
                         </tr>
@@ -86,11 +85,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Are you sure you want to disable this teacher?
+                Are you sure you want to disable this student?
             </div>
             <div class="modal-footer">
                 <form id="deleteForm" method="post">
-                    <input type="hidden" id="deleteTeacherId" name="id" />
+                    <input type="hidden" id="deleteStudentId" name="id" />
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-danger">Disable</button>
                 </form>
@@ -107,11 +106,11 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                Are you sure you want to enable this teacher?
+                Are you sure you want to enable this student?
             </div>
             <div class="modal-footer">
                 <form id="enableForm" method="post">
-                    <input type="hidden" id="enableTeacherId" name="id" />
+                    <input type="hidden" id="enableStudentId" name="id" />
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
                     <button type="submit" class="btn btn-success">Enable</button>
                 </form>
@@ -125,17 +124,17 @@
         $(document).ready(function () {
             $('#deleteModal').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget);
-                var teacherId = button.data('teacher-id');
+                var studentId = button.data('student-id');
                 var modal = $(this);
-                modal.find('#deleteTeacherId').val(teacherId);
+                modal.find('#deleteStudentId').val(studentId);
             });
 
             $('#deleteForm').on('submit', function (e) {
                 e.preventDefault();
                 var form = $(this);
-                var teacherId = form.find('#deleteTeacherId').val();
+                var studentId = form.find('#deleteStudentId').val();
 
-                $.post('/Admin/DeleteTeacher', { id: teacherId }, function (data) {
+                $.post('/Admin/DeleteStudent', { id: studentId }, function (data) {
                     $('#deleteModal').modal('hide');
                     if (data.success) {
                         Swal.fire({
@@ -157,17 +156,17 @@
 
             $('#enableModal').on('show.bs.modal', function (event) {
                 var button = $(event.relatedTarget);
-                var teacherId = button.data('teacher-id');
+                var studentId = button.data('student-id');
                 var modal = $(this);
-                modal.find('#enableTeacherId').val(teacherId);
+                modal.find('#enableStudentId').val(studentId);
             });
 
             $('#enableForm').on('submit', function (e) {
                 e.preventDefault();
                 var form = $(this);
-                var teacherId = form.find('#enableTeacherId').val();
+                var studentId = form.find('#enableStudentId').val();
 
-                $.post('/Admin/EnableTeacher', { id: teacherId }, function (data) {
+                $.post('/Admin/EnableStudent', { id: studentId }, function (data) {
                     $('#enableModal').modal('hide');
                     if (data.success) {
                         Swal.fire({
