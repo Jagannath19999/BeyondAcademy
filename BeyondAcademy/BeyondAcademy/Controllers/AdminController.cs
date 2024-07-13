@@ -247,7 +247,7 @@ namespace BeyondAcademy.Controllers
                 {
                     Arid = Guid.NewGuid(),
                     AcId = acc.AcId,
-                     = roleId.Value,
+                    RoleId = roleId.Value,
                     IsActive = true,
                     CreatedBy = "Admin",
                     CreatedOn = DateTime.Now,
