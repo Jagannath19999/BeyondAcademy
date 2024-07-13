@@ -35,8 +35,13 @@ namespace BeyondAcademy.Controllers
         [HttpPost]
         public IActionResult Login(string userId, string password)
         {
-            var user = _context.Accounts.FirstOrDefault(x => (x.UserId == userId || x.Email == userId) && x.Password == HashPassword(password) && x.IsActive);
-            if (user != null)
+            var user = _context.Accounts.FirstOrDefault(x => (x.UserId == userId || x.Email == userId) && x.Password == HashPassword(password));
+            if (user != null && !user.IsActive)
+            {
+                ModelState.AddModelError(string.Empty, "Your account is disabled, please contact administrator");
+                return View();
+            }
+            if (user != null && user.IsActive)
             {
                 var regId = user.RegdId.ToString();
                 var acId = user.AcId.ToString();
@@ -63,7 +68,7 @@ namespace BeyondAcademy.Controllers
                 }
 
             }
-            ModelState.AddModelError(string.Empty, "Incorrect username or password entered.");
+            ModelState.AddModelError(string.Empty, "Incorrect username or password entered");
             return View();
         }
 

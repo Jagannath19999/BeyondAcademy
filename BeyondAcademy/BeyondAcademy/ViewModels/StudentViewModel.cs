@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace BeyondAcademy.ViewModels
 {
-    public class TeacherViewModel
+    public class StudentViewModel
     {
         public Guid? RegdId { get; set; }
 
@@ -28,12 +28,6 @@ namespace BeyondAcademy.ViewModels
         //[PastDate(ErrorMessage = "Date of Birth can't be today or a future date")]
         public string? DateOfBirth { get; set; }
 
-        [DataType(DataType.Password)]
-        public string? NewPassword { get; set; }
-
-        [DataType(DataType.Password)]
-        [Compare("NewPassword", ErrorMessage = "New password and confirm password doesn't match")]
-        public string? ConfirmPassword { get; set; }
         public bool? IsActive { get; set; }
     }
 }
